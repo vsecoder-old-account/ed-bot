@@ -1,13 +1,24 @@
 // импорт библиотек
 const mineflayer = require('mineflayer');
 var tpsPlugin = require('mineflayer-tps')(mineflayer);
+const Telegraf = require('telegraf')
+const tg = new Telegraf(''); // tg bot token
+let adminId = 1218845111;
+
+tg.start((ctx) => ctx.reply('Welcome'));
+tg.hears('/tps', (ctx) => ctx.reply(' ~ TPS: ' + bot.getTps()))
+
+tg.on('text', (ctx) => {
+  if (ctx.message === undefined) return ''
+  bot.chat(ctx.message.text)
+})
 
 // запуск бота
-let password = '...';  // type
+let password = ''; // пароль
 const bot = mineflayer.createBot({
   host: 'mc.edenor.ru',
   port: 25565,
-  username: '...',  // type
+  username: '',  // ник
   version: '1.18'
 });
 
@@ -47,14 +58,16 @@ bot.on('spawn', () => {
     }, 1000)
     auth = true
   } else {
-    setInterval(() => {console.log(' ~ TPS: ' + bot.getTps())}, 15000);
-    return bot.chat('!Пейн стоит афк, а Херостив уже мог бы блин сделать /afk, чтобы скрипт это не писал');
+    tg.launch()
+    //return bot.chat('!Я стою афк');
+    tg.telegram.sendMessage(adminId, `Bot on`)
   }
 });
 
 // команды
 bot.on('chat', (username, message) => {
   console.log(`${username}: ${message}`);
+  tg.telegram.sendMessage(adminId, `${username}: ${message}`)
   // тпс
   //if (message === 'Tps') {
   //    bot.chat('!Current tps: ' + bot.getTps())
@@ -65,6 +78,7 @@ bot.on('chat', (username, message) => {
 bot.on('death', function() {
   console.log(" ~ I died x.x");
   bot.chat("!I died x.x");
+  tg.telegram.sendMessage(adminId, `I died x.x`)
 });
 
 // Прослушивание ошибок и причин отключения от сервера:
