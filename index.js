@@ -3,7 +3,7 @@ const mineflayer = require('mineflayer');
 var tpsPlugin = require('mineflayer-tps')(mineflayer);
 const Telegraf = require('telegraf')
 const tg = new Telegraf(''); // tg bot token
-let adminId = 1218845111;
+let adminId = ''; // you tg id
 
 tg.start((ctx) => ctx.reply('Welcome'));
 tg.hears('/tps', (ctx) => ctx.reply(' ~ TPS: ' + bot.getTps()))
